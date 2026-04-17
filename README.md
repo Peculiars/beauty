@@ -11,7 +11,7 @@
 
 </div>
 
-# � AI-Powered E-commerce Platform - Meenah Fashion Room
+# � AI-Powered E-commerce Platform - Beauty Couture
 
 > Build a modern fashion e-commerce store with an AI shopping assistant, real-time inventory updates, and a powerful admin dashboard — all powered by cutting-edge technologies.
 

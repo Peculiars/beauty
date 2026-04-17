@@ -3,7 +3,7 @@ import { SuccessClient } from "./SuccessClient";
 import { verifyAndProcessPayment } from "@/lib/actions/checkout";
 
 export const metadata = {
-  title: "Order Confirmed | Meenah Fashion Room",
+  title: "Order Confirmed | Beauty Couture",
   description: "Your order has been placed successfully",
 };
 

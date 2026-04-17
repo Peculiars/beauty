@@ -20,7 +20,7 @@ RESEND_API_KEY=your_resend_api_key_here
 ### 3. Verify Domain (Production)
 For production use, you'll need to verify your domain in Resend:
 1. Go to Domains in your Resend dashboard
-2. Add your domain (e.g., `meenahfashionroom.com`)
+2. Add your domain (e.g., `beautycouture.com`)
 3. Follow the DNS verification steps
 4. Update the `from` email in `lib/email/orderNotifications.ts` to use your verified domain
 

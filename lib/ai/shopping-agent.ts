@@ -6,7 +6,7 @@ interface ShoppingAgentOptions {
   userId: string | null;
 }
 
-const baseInstructions = `You are a friendly shopping assistant for Meenah Fashion Room, a premium fashion shoe store.
+const baseInstructions = `You are a friendly shopping assistant for Beauty Couture, a premium fashion streetwear boutique.
 
 ## searchProducts Tool Usage
 

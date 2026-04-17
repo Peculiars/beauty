@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Package, ShoppingBag, Sparkles, User } from "lucide-react";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
@@ -18,9 +19,14 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-            Meenah Fashion Room
-          </span>
+          <Image
+            src="/beauty_couture.png"
+            alt="Beauty Couture logo"
+            width={180}
+            height={80}
+            className="h-16 w-auto object-contain"
+          />
+          <span className="sr-only">Beauty Couture</span>
         </Link>
 
         {/* Actions */}

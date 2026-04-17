@@ -1,7 +1,7 @@
 import { CheckoutClient } from "./CheckoutClient";
 
 export const metadata = {
-  title: "Checkout | Meenah Fashion Room",
+  title: "Checkout | Beauty Couture",
   description: "Complete your purchase",
 };
 

@@ -10,7 +10,7 @@ import { formatPrice, formatDate, formatOrderNumber } from "@/lib/utils";
 import { StackedProductImages } from "@/components/app/StackedProductImages";
 
 export const metadata = {
-  title: "Your Orders | Meenah Fashion Room",
+  title: "Your Orders | Beauty Couture",
   description: "View your order history",
 };
 

@@ -31,8 +31,8 @@ export async function sendOrderStatusEmail(data: OrderEmailData) {
             <li>Status: Payment Confirmed</li>
           </ul>
           <p>Your order is now being processed. We'll send you another update when your order ships.</p>
-          <p>Thank you for shopping with us!</p>
-          <p>Best regards,<br>Meenah Fashion Room Team</p>
+          <p>Thank you for shopping with Beauty Couture!</p>
+          <p>Best regards,<br>Beauty Couture Team</p>
         </div>
       `;
       break;
@@ -51,8 +51,8 @@ export async function sendOrderStatusEmail(data: OrderEmailData) {
             <li>Status: Shipped</li>
           </ul>
           <p>You'll receive a tracking number soon if available. We'll send you another update when your order is delivered.</p>
-          <p>Thank you for choosing Meenah Fashion Room!</p>
-          <p>Best regards,<br>Meenah Fashion Room Team</p>
+          <p>Thank you for choosing Beauty Couture!</p>
+          <p>Best regards,<br>Beauty Couture Team</p>
         </div>
       `;
       break;
@@ -71,8 +71,8 @@ export async function sendOrderStatusEmail(data: OrderEmailData) {
             <li>Status: Delivered</li>
           </ul>
           <p>We hope you love your new items! If you have any questions or concerns, please don't hesitate to contact us.</p>
-          <p>Thank you for shopping with Meenah Fashion Room. We look forward to serving you again!</p>
-          <p>Best regards,<br>Meenah Fashion Room Team</p>
+          <p>Thank you for shopping with Beauty Couture. We look forward to serving you again!</p>
+          <p>Best regards,<br>Beauty Couture Team</p>
         </div>
       `;
       break;
@@ -93,7 +93,7 @@ export async function sendOrderStatusEmail(data: OrderEmailData) {
           <p>If this cancellation was unexpected or if you have any questions, please contact our customer service team immediately.</p>
           <p>Any payments made will be refunded to your original payment method within 3-5 business days.</p>
           <p>We apologize for any inconvenience this may have caused.</p>
-          <p>Best regards,<br>Meenah Fashion Room Team</p>
+          <p>Best regards,<br>Beauty Couture Team</p>
         </div>
       `;
       break;
@@ -104,7 +104,7 @@ export async function sendOrderStatusEmail(data: OrderEmailData) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: "Meenah Fashion Room <orders@meenahfashionroom.com>",
+      from: "Beauty Couture <orders@beautycouture.com>",
       to: [customerEmail],
       subject,
       html: htmlContent,

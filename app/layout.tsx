@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Meenah Fashion Room",
+  title: "Beauty Couture",
   description: "An Haven for Fashion Enthusiasts, Get Inspired, and Stay Ahead of the Trends",
 };
 
