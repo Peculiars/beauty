@@ -34,11 +34,6 @@ You must give appropriate credit, provide a link to the license, and indicate if
 
 **Required attribution format:**
 
-```
-Based on work by Sonny Sangha / PAPAFAM
-Original source: https://github.com/sonnysangha/ai-ecommerce-sanity-clerk
-License: CC BY-NC 4.0
-```
 
 ### NonCommercial
 You may not use the material for commercial purposes.

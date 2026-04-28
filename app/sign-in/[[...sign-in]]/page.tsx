@@ -19,7 +19,7 @@ export default function SignInPage() {
             Sign in to access the admin panel
           </p>
         </div>
-        <SignIn />
+        <SignIn forceRedirectUrl="/administrator" />
       </div>
     </div>
   );
