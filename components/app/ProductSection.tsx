@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { PanelLeftClose, PanelLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,9 @@ interface ProductSectionProps {
     min: number;
     max: number;
   };
+  currentPage: number;
+  hasMore: boolean;
+  currentSearchParams: Record<string, string>;
 }
 
 export function ProductSection({
@@ -25,22 +29,41 @@ export function ProductSection({
   products,
   searchQuery,
   priceRange,
+  currentPage,
+  hasMore,
+  currentSearchParams,
 }: ProductSectionProps) {
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const buildPageHref = (page: number) => {
+    const params = new URLSearchParams();
+
+    Object.entries(currentSearchParams).forEach(([key, value]) => {
+      if (!value || key === "page") return;
+      params.set(key, value);
+    });
+
+    if (page > 1) {
+      params.set("page", String(page));
+    }
+
+    const queryString = params.toString();
+    return queryString ? `/?${queryString}` : "/";
+  };
 
   return (
     <div className="flex flex-col gap-6">
       {/* Header with results count and filter toggle */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {products.length} {products.length === 1 ? "product" : "products"}{" "}
-          found
+          Showing {products.length} {products.length === 1 ? "product" : "products"}
           {searchQuery && (
             <span>
               {" "}
               for &quot;<span className="font-medium">{searchQuery}</span>&quot;
             </span>
           )}
+          {currentPage > 1 && <span> · Page {currentPage}</span>}
         </p>
 
         {/* Filter toggle button */}
@@ -81,6 +104,24 @@ export function ProductSection({
         {/* Product Grid - expands to full width when filters hidden */}
         <main className="flex-1 transition-all duration-300">
           <ProductGrid products={products} />
+
+          <div className="mt-8 flex flex-col gap-3 rounded-3xl border border-zinc-200 bg-white p-4 text-sm text-zinc-600 shadow-sm shadow-zinc-100 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:shadow-none sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              Page {currentPage} · {products.length} item{products.length === 1 ? "" : "s"}
+            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              {currentPage > 1 && (
+                <Link href={buildPageHref(currentPage - 1)} className="rounded-full border border-zinc-300 px-4 py-2 text-sm text-zinc-700 transition hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800">
+                  Previous
+                </Link>
+              )}
+              {hasMore && (
+                <Link href={buildPageHref(currentPage + 1)} className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200">
+                  Load More
+                </Link>
+              )}
+            </div>
+          </div>
         </main>
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, ShoppingBag, Sparkles, User } from "lucide-react";
+import { Package, ShoppingBag, Sparkles, User, Mail } from "lucide-react";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { useCartActions, useTotalItems } from "@/lib/store/cart-store-provider";
@@ -32,6 +32,13 @@ export function Header() {
               </Link>
             </Button>
           </SignedIn>
+
+          <Button asChild className="hidden md:block">
+            <Link href="/contact" className="flex items-center gap-2">
+              <Mail className="h-5 w-5" />
+              <span className="text-sm font-medium">Contact</span>
+            </Link>
+          </Button>
 
           {/* AI Shopping Assistant
           {!isChatOpen && (
@@ -75,6 +82,14 @@ export function Header() {
                   label="My Orders"
                   labelIcon={<Package className="h-4 w-4" />}
                   href="/orders"
+                />
+              </UserButton.MenuItems>
+            
+               <UserButton.MenuItems>
+                <UserButton.Link
+                  label="Contact Us"
+                  labelIcon={<Mail className="h-4 w-4" />}
+                  href="/contact"
                 />
               </UserButton.MenuItems>
             </UserButton>

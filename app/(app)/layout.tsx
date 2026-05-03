@@ -7,6 +7,7 @@ import { Header } from "@/components/app/Header";
 import { CartSheet } from "@/components/app/CartSheet";
 import { ChatSheet } from "@/components/app/ChatSheet";
 import { AppShell } from "@/components/app/AppShell";
+import { Footer } from "@/components/app/Footer";
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,6 +17,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
           <AppShell>
             <Header />
             <main>{children}</main>
+            <Footer />
           </AppShell>
           <CartSheet />
           <ChatSheet />

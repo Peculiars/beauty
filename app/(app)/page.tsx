@@ -26,6 +26,7 @@ interface PageProps {
     maxPrice?: string;
     sort?: string;
     inStock?: string;
+    page?: string;
   }>;
 }
 
@@ -40,6 +41,9 @@ export default async function HomePage({ searchParams }: PageProps) {
   const maxPrice = Number(params.maxPrice) || 0;
   const sort = params.sort ?? "name";
   const inStock = params.inStock === "true";
+  const page = Math.max(1, Number(params.page) || 1);
+  const pageSize = 20;
+  const start = (page - 1) * pageSize;
 
   // Select query based on sort parameter
   const getQuery = () => {
@@ -60,20 +64,6 @@ export default async function HomePage({ searchParams }: PageProps) {
     }
   };
 
-  // Fetch products with filters (server-side via GROQ)
-  const { data: products } = await sanityFetch({
-    query: getQuery(),
-    params: {
-      searchQuery,
-      categorySlug,
-      color,
-      size,
-      minPrice,
-      maxPrice,
-      inStock,
-    },
-  });
-
   // Fetch categories for filter sidebar
   const { data: categories } = await sanityFetch({
     query: ALL_CATEGORIES_QUERY,
@@ -93,6 +83,22 @@ export default async function HomePage({ searchParams }: PageProps) {
     min: priceRangeData?.minPrice ?? 0,
     max: priceRangeData?.maxPrice ?? 5000,
   };
+
+  const { data: rawProducts } = await sanityFetch({
+    query: `${getQuery()} [${start}...${start + pageSize + 1}]`,
+    params: {
+      searchQuery,
+      categorySlug,
+      color,
+      size,
+      minPrice,
+      maxPrice,
+      inStock,
+    },
+  });
+
+  const hasMore = rawProducts.length > pageSize;
+  const products = hasMore ? rawProducts.slice(0, pageSize) : rawProducts;
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
@@ -129,6 +135,12 @@ export default async function HomePage({ searchParams }: PageProps) {
           products={products}
           searchQuery={searchQuery}
           priceRange={priceRange}
+          currentPage={page}
+          hasMore={hasMore}
+          currentSearchParams={{
+            ...params,
+            page: String(page),
+          }}
         />
       </div>
     </div>
