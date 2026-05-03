@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { client } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
 import { saveProductImages, uploadImageAsset } from "@/lib/actions/imageActions";
 
 
@@ -25,6 +26,8 @@ interface SanityImageAsset {
     _ref: string;
   };
 }
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB per image
 
 interface ImageUploaderProps {
   documentId: string;
@@ -51,18 +54,35 @@ export function ImageUploader({ documentId }: ImageUploaderProps) {
 
   // Upload via server action
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+    const files = Array.from(e.target.files ?? []);
+    if (files.length === 0) return;
+
+    const oversizedFiles = files.filter((file) => file.size > MAX_FILE_SIZE);
+    const acceptedFiles = files.filter((file) => file.size <= MAX_FILE_SIZE);
+
+    if (oversizedFiles.length > 0) {
+      setError(
+        `Some files were too large. Max upload size is 50MB. Skipped: ${oversizedFiles
+          .map((file) => file.name)
+          .join(", ")}`
+      );
+    } else {
+      setError(null);
+    }
+
+    if (acceptedFiles.length === 0) {
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
 
     setIsUploading(true);
-    setError(null);
 
     try {
       const newImages: SanityImageAsset[] = [];
 
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        setUploadProgress(`Uploading ${i + 1} of ${files.length}...`);
+      for (let i = 0; i < acceptedFiles.length; i++) {
+        const file = acceptedFiles[i];
+        setUploadProgress(`Uploading ${i + 1} of ${acceptedFiles.length}...`);
 
         const formData = new FormData();
         formData.append("file", file);
@@ -159,26 +179,35 @@ export function ImageUploader({ documentId }: ImageUploaderProps) {
         )}
       </Button>
 
+      <p className="text-xs text-zinc-500 dark:text-zinc-400">
+        Upload images up to 50MB each.
+      </p>
+
       {error && (
         <p className="text-xs text-red-500 dark:text-red-400">{error}</p>
       )}
 
       {images.length > 0 ? (
-        <div className="grid grid-cols-2 gap-3">
-          {images.map((img, index) => (
-            <ImageThumbnail
-              key={img._key}
-              image={img}
-              index={index}
-              isFirst={index === 0}
-              total={images.length}
-              onRemove={() => handleRemoveImage(img._key)}
-              onMoveUp={() => handleMoveImage(index, index - 1)}
-              onMoveDown={() => handleMoveImage(index, index + 1)}
-              canMoveUp={index > 0}
-              canMoveDown={index < images.length - 1}
-            />
-          ))}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+            <span>{images.length} uploaded image{images.length === 1 ? "" : "s"}</span>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {images.map((img, index) => (
+              <ImageThumbnail
+                key={img._key}
+                image={img}
+                index={index}
+                isFirst={index === 0}
+                total={images.length}
+                onRemove={() => handleRemoveImage(img._key)}
+                onMoveUp={() => handleMoveImage(index, index - 1)}
+                onMoveDown={() => handleMoveImage(index, index + 1)}
+                canMoveUp={index > 0}
+                canMoveDown={index < images.length - 1}
+              />
+            ))}
+          </div>
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 py-10 dark:border-zinc-700">
@@ -220,20 +249,9 @@ function ImageThumbnail({
   canMoveUp,
   canMoveDown,
 }: ImageThumbnailProps) {
-  const ref = image.asset?._ref;
-
-  // Build CDN URL from asset ref: image-{id}-{dimensions}-{format}
-  let url: string | null = null;
-  if (ref) {
-    const parts = ref.split("-");
-    // parts: ["image", id, width, height, format]
-    if (parts.length >= 4) {
-      const id = parts[1];
-      const dimensions = `${parts[2]}-${parts[3]}`;
-      const format = parts[4] ?? "jpg";
-      url = `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/${id}-${dimensions}.${format}`;
-    }
-  }
+  const url = image.asset?._ref
+    ? urlFor(image).width(320).height(320).auto("format").url()
+    : null;
 
   return (
     <div
@@ -257,36 +275,38 @@ function ImageThumbnail({
       )}
 
       {/* Hover overlay */}
-      <div className="absolute inset-0 flex items-center justify-center gap-1.5 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-        <div className="flex flex-col gap-1">
+      <div className="absolute inset-0 flex flex-col justify-between bg-black/50 p-2 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-1">
+            <Button
+              size="icon"
+              variant="secondary"
+              className="h-7 w-7"
+              onClick={onMoveUp}
+              disabled={!canMoveUp}
+            >
+              <ChevronUp className="h-4 w-4" />
+            </Button>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="h-7 w-7"
+              onClick={onMoveDown}
+              disabled={!canMoveDown}
+            >
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+          </div>
+
           <Button
-            size="icon"
-            variant="secondary"
-            className="h-7 w-7"
-            onClick={onMoveUp}
-            disabled={!canMoveUp}
+            variant="destructive"
+            size="sm"
+            className="w-full"
+            onClick={onRemove}
           >
-            <ChevronUp className="h-4 w-4" />
-          </Button>
-          <Button
-            size="icon"
-            variant="secondary"
-            className="h-7 w-7"
-            onClick={onMoveDown}
-            disabled={!canMoveDown}
-          >
-            <ChevronDown className="h-4 w-4" />
+            Delete
           </Button>
         </div>
-
-        <Button
-          variant="destructive"
-          size="icon"
-          className="h-7 w-7"
-          onClick={onRemove}
-        >
-          <X className="h-4 w-4" />
-        </Button>
       </div>
     </div>
   );
