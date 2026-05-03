@@ -14,6 +14,7 @@ export {
   AdminSearch,
   useProductSearchFilter,
   useOrderSearchFilter,
+  useContactSearchFilter,
   useDebouncedValue,
 } from "./AdminSearch";
 export { ImageUploader } from "./ImageUploader";

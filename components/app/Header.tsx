@@ -33,7 +33,7 @@ export function Header() {
             </Button>
           </SignedIn>
 
-          <Button asChild className="hidden md:block">
+          <Button asChild className="hidden md:flex">
             <Link href="/contact" className="flex items-center gap-2">
               <Mail className="h-5 w-5" />
               <span className="text-sm font-medium">Contact</span>

@@ -81,3 +81,15 @@ export function useOrderSearchFilter(searchQuery: string) {
 
   return { filter, isSearching: searchQuery !== debouncedQuery };
 }
+
+// Hook to build GROQ filter for contact message search
+export function useContactSearchFilter(searchQuery: string) {
+  const debouncedQuery = useDebouncedValue(searchQuery, 300);
+
+  const filter = useMemo(() => {
+    if (!debouncedQuery.trim()) return undefined;
+    return `name match "*${debouncedQuery}*" || email match "*${debouncedQuery}*" || subject match "*${debouncedQuery}*" || message match "*${debouncedQuery}*"`;
+  }, [debouncedQuery]);
+
+  return { filter, isSearching: searchQuery !== debouncedQuery };
+}

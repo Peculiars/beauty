@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
+import ContactForm from "./ContactForm";
 
 export default function ContactPage() {
   return (
@@ -118,69 +119,7 @@ export default function ContactPage() {
               Send a message
             </h2>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.25em] text-zinc-400">
-                  Your name
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Fatima Bello"
-                  className="h-12 rounded-xl border border-transparent bg-zinc-100 px-4 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-white focus:ring-0"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.25em] text-zinc-400">
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  placeholder="you@example.com"
-                  className="h-12 rounded-xl border border-transparent bg-zinc-100 px-4 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-white focus:ring-0"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.25em] text-zinc-400">
-                  Phone (optional)
-                </label>
-                <input
-                  type="tel"
-                  placeholder="+234 …"
-                  className="h-12 rounded-xl border border-transparent bg-zinc-100 px-4 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-white focus:ring-0"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.25em] text-zinc-400">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Order enquiry"
-                  className="h-12 rounded-xl border border-transparent bg-zinc-100 px-4 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-white focus:ring-0"
-                />
-              </div>
-
-              <div className="col-span-full flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.25em] text-zinc-400">
-                  Message
-                </label>
-                <textarea
-                  rows={5}
-                  placeholder="How can we help you?"
-                  className="w-full rounded-xl border border-transparent bg-zinc-100 px-4 py-3.5 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-white focus:ring-0 resize-none"
-                />
-              </div>
-            </div>
-
-            <button
-              type="button"
-              className="mt-5 w-full rounded-xl bg-zinc-950 px-6 py-4 text-xs font-medium uppercase tracking-[0.1em] text-white transition hover:opacity-80 active:scale-[0.99]"
-            >
-              Send message →
-            </button>
+            <ContactForm />
 
             <Link
               href="/"

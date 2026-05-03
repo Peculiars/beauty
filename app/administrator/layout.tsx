@@ -10,6 +10,7 @@ import {
   Menu,
   X,
   ExternalLink,
+  Mail,
 } from "lucide-react";
 import { Providers } from "@/components/providers/Providers";
 import { AdminGuard } from "@/components/admin/AdminGuard";
@@ -31,6 +32,11 @@ const navItems = [
     label: "Orders",
     href: "/administrator/orders",
     icon: ShoppingCart,
+  },
+  {
+    label: "Contact Messages",
+    href: "/administrator/contact-messages",
+    icon: Mail,
   },
 ];
 
