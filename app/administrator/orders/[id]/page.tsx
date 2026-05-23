@@ -38,6 +38,8 @@ interface OrderDetail {
     _key: string;
     quantity: number;
     priceAtPurchase: number;
+    selectedSize?: string | null;
+    selectedColor?: string | null;
     product: {
       _id: string;
       name: string;
