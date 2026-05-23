@@ -8,11 +8,13 @@ import { isLowStock as checkLowStock } from "@/lib/constants/stock";
 interface StockBadgeProps {
   productId: string;
   stock: number;
+  selectedSize?: string | null;
+  selectedColor?: string | null;
   className?: string;
 }
 
-export function StockBadge({ productId, stock, className }: StockBadgeProps) {
-  const cartItem = useCartItem(productId);
+export function StockBadge({ productId, stock, selectedSize, selectedColor, className }: StockBadgeProps) {
+  const cartItem = useCartItem(productId, { selectedSize: selectedSize ?? null, selectedColor: selectedColor ?? null });
 
   const quantityInCart = cartItem?.quantity ?? 0;
   const isAtMax = quantityInCart >= stock && stock > 0;

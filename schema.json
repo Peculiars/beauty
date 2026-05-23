@@ -92,6 +92,21 @@
                 },
                 "optional": true
               }
+              ,
+              "selectedSize": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "selectedColor": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              }
             },
             "rest": {
               "type": "object",

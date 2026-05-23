@@ -13,6 +13,8 @@ interface CartItem {
   price: number;
   quantity: number;
   image?: string;
+  selectedSize?: string | null;
+  selectedColor?: string | null;
 }
 
 interface CheckoutResult {
@@ -123,18 +125,20 @@ export async function prepareCheckout(
     // 7. Generate unique reference
     const reference = `txn_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
 
-    // 8. Prepare metadata for verification
+    // 8. Prepare metadata for verification (include selected sizes/colors)
     const metadata = {
-  clerkUserId: userId,
-  sanityCustomerId: "",
-  productIds: validatedItems.map((i) => i.product._id).join(","),
-  quantities: validatedItems.map((i) => i.quantity).join(","),
-  deliveryName: deliveryInfo?.name ?? "",        // ✅
-  deliveryPhone: deliveryInfo?.phone ?? "",      // ✅
-  deliveryAddress: deliveryInfo?.address ?? "",  // ✅
-  deliveryCity: deliveryInfo?.city ?? "",        // ✅
-  deliveryState: deliveryInfo?.state ?? "",      // ✅
-};
+      clerkUserId: userId,
+      sanityCustomerId: "",
+      productIds: validatedItems.map((i) => i.product._id).join(","),
+      quantities: validatedItems.map((i) => i.quantity).join(","),
+      sizes: items.map((i) => i.selectedSize ?? "").join(","),
+      colors: items.map((i) => i.selectedColor ?? "").join(","),
+      deliveryName: deliveryInfo?.name ?? "",
+      deliveryPhone: deliveryInfo?.phone ?? "",
+      deliveryAddress: deliveryInfo?.address ?? "",
+      deliveryCity: deliveryInfo?.city ?? "",
+      deliveryState: deliveryInfo?.state ?? "",
+    };
 
     return {
       success: true,
@@ -190,11 +194,13 @@ export async function verifyAndProcessPayment(reference: string) {
       clerkUserId,
       productIds: productIdsString,
       quantities: quantitiesString,
-      deliveryName,     // ✅
-      deliveryPhone,    // ✅
-      deliveryAddress,  // ✅
-      deliveryCity,     // ✅
-      deliveryState,    // ✅
+      sizes: sizesString,
+      colors: colorsString,
+      deliveryName, // ✅
+      deliveryPhone, // ✅
+      deliveryAddress, // ✅
+      deliveryCity, // ✅
+      deliveryState, // ✅
     } = paymentData.metadata ?? {};
 
     if (!clerkUserId || !productIdsString || !quantitiesString) {
@@ -209,6 +215,8 @@ export async function verifyAndProcessPayment(reference: string) {
 
     const productIds = productIdsString.split(",");
     const quantities = quantitiesString.split(",").map(Number);
+    const sizes = (sizesString || "").split(",");
+    const colors = (colorsString || "").split(",");
 
     // Check if order already exists (idempotency)
     const existingOrder = await client.fetch(ORDER_BY_PAYSTACK_PAYMENT_ID_QUERY, {
@@ -243,18 +251,20 @@ const customer = existingCustomer ?? await writeClient.create({
 const products = await client.fetch(PRODUCTS_BY_IDS_QUERY, { ids: productIds });
 
 // Build order items with correct individual prices
-const orderItems = productIds.map((productId: string, index: number) => {
-  const product = products.find((p: { _id: string }) => p._id === productId);
-  return {
-    _key: `item-${index}`,
-    product: {
-      _type: "reference" as const,
-      _ref: productId,
-    },
-    quantity: quantities[index],
-    priceAtPurchase: product?.price ?? 0, // ✅ individual product price, not total
-  };
-});
+    const orderItems = productIds.map((productId: string, index: number) => {
+      const product = products.find((p: { _id: string }) => p._id === productId);
+      return {
+        _key: `item-${index}`,
+        product: {
+          _type: "reference" as const,
+          _ref: productId,
+        },
+        quantity: quantities[index],
+        priceAtPurchase: product?.price ?? 0,
+        selectedSize: sizes[index] ?? "",
+        selectedColor: colors[index] ?? "",
+      };
+    });
 
     // Generate order number
     const orderNumber = `ORD-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;

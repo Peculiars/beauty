@@ -8,7 +8,6 @@ import {
 import { ProductGallery } from "@/components/app/ProductGallery";
 import { ProductInfo } from "@/components/app/ProductInfo";
 import { ProductGrid } from "@/components/app/ProductGrid";
-import type { PRODUCT_BY_SLUG_QUERYResult } from "@/sanity.types";
 
 export const dynamic = "force-dynamic";
 

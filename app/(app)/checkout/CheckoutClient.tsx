@@ -188,7 +188,7 @@ export function CheckoutClient() {
 
                 return (
                   <div
-                    key={item.productId}
+                    key={item.id}
                     className={`flex gap-4 px-6 py-4 ${hasIssue ? "bg-red-50 dark:bg-red-950/20" : ""}`}
                   >
                     <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md bg-zinc-100 dark:bg-zinc-800">
@@ -202,6 +202,13 @@ export function CheckoutClient() {
                       <div>
                         <h3 className="font-medium text-zinc-900 dark:text-zinc-100">{item.name}</h3>
                         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Qty: {item.quantity}</p>
+                        {(item.selectedSize || item.selectedColor) && (
+                          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                            {item.selectedSize && <span>Size: {item.selectedSize}</span>}
+                            {item.selectedSize && item.selectedColor && <span className="mx-2">•</span>}
+                            {item.selectedColor && <span>Color: {item.selectedColor}</span>}
+                          </p>
+                        )}
                         {stockInfo?.isOutOfStock && (
                           <p className="mt-1 text-sm font-medium text-red-600">Out of stock</p>
                         )}

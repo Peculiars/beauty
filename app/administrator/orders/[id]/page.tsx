@@ -66,6 +66,8 @@ async function fetchOrderDetail(id: string): Promise<OrderDetail | null> {
       _key,
       quantity,
       priceAtPurchase,
+      selectedSize,
+      selectedColor,
       product->{
         _id,
         name,
@@ -193,6 +195,13 @@ function OrderDetailContent({ id }: { id: string }) {
                       <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 sm:text-sm">
                         Qty: {item.quantity} × {formatPrice(item.priceAtPurchase)}
                       </p>
+                      {(item.selectedSize || item.selectedColor) && (
+                        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 sm:text-sm">
+                          {item.selectedSize && <span>Size: {item.selectedSize}</span>}
+                          {item.selectedSize && item.selectedColor && <span className="mx-2">•</span>}
+                          {item.selectedColor && <span>Color: {item.selectedColor}</span>}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="text-right">

@@ -46,6 +46,18 @@ export const orderType = defineType({
               description: "Price at time of purchase",
               validation: (rule) => rule.required(),
             }),
+            defineField({
+              name: "selectedSize",
+              title: "Selected Size",
+              type: "string",
+              description: "Size selected by the customer for this item",
+            }),
+            defineField({
+              name: "selectedColor",
+              title: "Selected Color",
+              type: "string",
+              description: "Color selected by the customer for this item",
+            }),
           ],
           preview: {
             select: {

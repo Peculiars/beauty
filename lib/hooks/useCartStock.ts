@@ -30,9 +30,9 @@ export function useCartStock(items: CartItem[]): UseCartStockReturn {
   const [stockMap, setStockMap] = useState<StockMap>(new Map());
   const [isLoading, setIsLoading] = useState(false);
 
-  // Memoize product IDs to use as stable dependency
+  // Memoize unique product IDs to use as stable dependency
   const productIds = useMemo(
-    () => items.map((item) => item.productId),
+    () => Array.from(new Set(items.map((item) => item.productId))),
     [items]
   );
 
@@ -49,20 +49,26 @@ export function useCartStock(items: CartItem[]): UseCartStockReturn {
         ids: productIds,
       });
 
-      const newStockMap = new Map<string, StockInfo>();
+      const quantityByProduct = new Map<string, number>();
 
       for (const item of items) {
-        const product = products.find(
-          (p: { _id: string }) => p._id === item.productId
-        );
-        const currentStock = product?.stock ?? 0;
+        const currentTotal = quantityByProduct.get(item.productId) ?? 0;
+        quantityByProduct.set(item.productId, currentTotal + item.quantity);
+      }
 
-        newStockMap.set(item.productId, {
-          productId: item.productId,
+      const newStockMap = new Map<string, StockInfo>();
+
+      for (const productId of productIds) {
+        const product = products.find((p: { _id: string }) => p._id === productId);
+        const currentStock = product?.stock ?? 0;
+        const totalQuantity = quantityByProduct.get(productId) ?? 0;
+
+        newStockMap.set(productId, {
+          productId,
           currentStock,
           isOutOfStock: currentStock === 0,
-          exceedsStock: item.quantity > currentStock,
-          availableQuantity: Math.min(item.quantity, currentStock),
+          exceedsStock: totalQuantity > currentStock,
+          availableQuantity: Math.min(totalQuantity, currentStock),
         });
       }
 

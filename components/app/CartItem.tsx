@@ -56,20 +56,30 @@ export function CartItem({ item, stockInfo }: CartItemProps) {
       {/* Details */}
       <div className="flex flex-1 flex-col">
         <div className="flex justify-between">
-          <Link
-            href={`/products/${item.productId}`}
-            className={cn(
-              "font-medium text-zinc-900 hover:text-zinc-600 dark:text-zinc-100 dark:hover:text-zinc-300",
-              isOutOfStock && "text-zinc-400 dark:text-zinc-500",
+          <div>
+            <Link
+              href={`/products/${item.productId}`}
+              className={cn(
+                "font-medium text-zinc-900 hover:text-zinc-600 dark:text-zinc-100 dark:hover:text-zinc-300",
+                isOutOfStock && "text-zinc-400 dark:text-zinc-500",
+              )}
+            >
+              {item.name}
+            </Link>
+            {(item.selectedSize || item.selectedColor) && (
+              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 sm:text-sm">
+                {item.selectedSize && <span>Size: {item.selectedSize}</span>}
+                {item.selectedSize && item.selectedColor && <span className="mx-2">•</span>}
+                {item.selectedColor && <span>Color: {item.selectedColor}</span>}
+              </p>
             )}
-          >
-            {item.name}
-          </Link>
+          </div>
+
           <Button
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-zinc-400 hover:text-red-500"
-            onClick={() => removeItem(item.productId)}
+            onClick={() => removeItem(item.id)}
           >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Remove {item.name}</span>
@@ -82,7 +92,7 @@ export function CartItem({ item, stockInfo }: CartItemProps) {
 
         {/* Stock Badge & Quantity Controls */}
         <div className="mt-2 flex flex-row justify-between items-center gap-2">
-          <StockBadge productId={item.productId} stock={currentStock} />
+          <StockBadge productId={item.productId} stock={currentStock} selectedSize={item.selectedSize ?? null} selectedColor={item.selectedColor ?? null} />
           {!isOutOfStock && (
             <div className="w-32 flex self-end ml-auto">
               <AddToCartButton
@@ -91,6 +101,8 @@ export function CartItem({ item, stockInfo }: CartItemProps) {
                 price={item.price}
                 image={item.image}
                 stock={currentStock}
+                selectedSize={item.selectedSize ?? null}
+                selectedColor={item.selectedColor ?? null}
               />
             </div>
           )}

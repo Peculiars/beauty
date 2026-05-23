@@ -371,6 +371,8 @@ export const PRODUCT_BY_SLUG_QUERY = defineQuery(`*[
     "slug": slug.current
   },
   material,
+  colors,
+  sizes,
   color,
   dimensions,
   stock,

@@ -34,6 +34,8 @@ export const ORDER_BY_ID_QUERY = defineQuery(`*[
     _key,
     quantity,
     priceAtPurchase,
+    selectedSize,
+    selectedColor,
     product->{
       _id,
       name,

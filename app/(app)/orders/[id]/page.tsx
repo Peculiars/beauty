@@ -103,6 +103,13 @@ export default async function OrderDetailPage({ params }: OrderPageProps) {
                       <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
                         Qty: {item.quantity}
                       </p>
+                      {(item.selectedSize || item.selectedColor) && (
+                        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                          {item.selectedSize && <span>Size: {item.selectedSize}</span>}
+                          {item.selectedSize && item.selectedColor && <span className="mx-2">•</span>}
+                          {item.selectedColor && <span>Color: {item.selectedColor}</span>}
+                        </p>
+                      )}
                     </div>
                   </div>
 
