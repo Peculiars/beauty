@@ -116,7 +116,7 @@ paystack.openIframe();
   return (
     <div className="space-y-2">
       <Button
-        onClick={()=> router.push('/checkout')}
+        onClick={handleCheckout}
         disabled={disabled || isLoading || items.length === 0 || !paystackLoaded}
         size="lg"
         className="w-full"
