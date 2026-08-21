@@ -122,7 +122,8 @@ cd beauty
 ### 2. Install dependencies
 
 ```bash
-pnpm install
+cp .env.example .env
+# then open .env and add the required keys (Sanity project id, dataset, tokens, etc.)
 ```
 
 ### 3. Configure environment variables
